@@ -42,11 +42,12 @@
         android:text="?"/-->
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_tell_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:text="Tell me now!"
         android:textSize="24sp"
-        android:text="Tell me now!"/>
+        android:onClick="sendMessage"/>
 
 </LinearLayout>
