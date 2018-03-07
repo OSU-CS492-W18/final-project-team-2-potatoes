@@ -1,5 +1,6 @@
 package com.cogwerks.potato;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,9 +24,10 @@ public class ResultDetailActivity extends AppCompatActivity {
         mPotatoAdapter = new PotatoAdapter();
         mResultListRecyclerView.setAdapter(mPotatoAdapter);
 
-        //add a fake string (later result text) to adapter
-        mPotatoAdapter.addResult("HI!");
-        mPotatoAdapter.addResult("Love this");
-        mPotatoAdapter.addResult("Bye");
+        Intent intent = getIntent();
+        if(intent != null && intent.hasExtra("searchString")){
+            String searchString = intent.getExtras().getString("searchString");
+            mPotatoAdapter.addResult(searchString);
+        }
     }
 }
