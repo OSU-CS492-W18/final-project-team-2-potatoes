@@ -1,52 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical"
-    tools:context="com.cogwerks.potato.MainActivity">
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
 
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_upload_image"
-        android:layout_marginBottom="20dp"
-        android:clickable="true"
-        android:contentDescription="Upload Image"/>
-
-    <TextView
-        android:id="@+id/tv_main_question"
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:textSize="32sp"
-        android:textColor="#000000"
-        android:textAlignment="center"
-        android:text="Is this a "/>
+        android:orientation="vertical"
+        tools:context="com.cogwerks.potato.MainActivity">
 
-    <EditText
-        android:id="@+id/et_search_box"
-        android:layout_width="700dp"
-        android:layout_height="wrap_content"
-        android:textSize="32sp"
-        android:hint="Potato..."/>
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_upload_image"
+            android:layout_marginBottom="0dp"
+            android:clickable="true"
+            android:contentDescription="Upload Image"/>
 
-    <!--TextView
-        android:id="@+id/tv_question_mark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="48sp"
-        android:text="?"/-->
+        <TextView
+            android:id="@+id/tv_main_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="32sp"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:text="Is this a "/>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="24sp"
-        android:text="Tell me now!"/>
+        <EditText
+            android:id="@+id/et_search_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:hint="Potato..."/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_tell_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tell me now!"
+            android:textSize="24sp"/>
+    </LinearLayout>
+</ScrollView>
