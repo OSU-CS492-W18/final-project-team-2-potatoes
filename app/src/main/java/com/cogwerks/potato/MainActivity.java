@@ -1,13 +1,20 @@
 package com.cogwerks.potato;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,12 +55,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Called when user hits tell me button
-   /* public void sendMessage(View view) {
-        Intent intent = new Intent(this, ResultDetailActivity.class);
-        startActivity(intent);
-    }*/
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData() != null){
+            Uri uri = data.getData();
+            try{
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                //send this data to our api
+            } catch (IOException e) {
+                Log.d("Error: ", "Failed to receive image. Please try again");
+            }
+        }
+    }
 }
