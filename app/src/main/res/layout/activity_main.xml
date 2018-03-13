@@ -39,6 +39,15 @@
             android:textSize="32sp"
             android:hint="Potato..."/>
 
+        <TextView
+            android:id="@+id/tv_loading_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:visibility="invisible"
+            android:text="Woops. We couldn't load your results. Check your internet connection and try again." />
+
         <Button
             android:id="@+id/btn_tell_me"
             android:layout_width="wrap_content"
