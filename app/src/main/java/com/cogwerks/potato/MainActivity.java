@@ -1,9 +1,13 @@
 package com.cogwerks.potato;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,16 +16,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
 
     private EditText mPotatoSearchText;
     private ImageView mUserPic;
     private int PICK_IMAGE_REQUEST = 1;
     private static final String IMAGE_TYPE = "image/*";
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private TextView mLoadingErrorMessageTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mPotatoSearchText = (EditText) findViewById(R.id.et_search_box);
+        mLoadingErrorMessageTV = findViewById(R.id.tv_loading_error_message);
 
         Button tellmeButton = (Button) findViewById(R.id.btn_tell_me);
         //Called when user hits tell me button
@@ -58,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy(){
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState){
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData() != null){
@@ -69,5 +92,32 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Error: ", "Failed to receive image. Please try again");
             }
         }
+    }
+
+    @Override
+    public Loader<String> onCreateLoader(int id, Bundle args) {
+        String potatoURL = null;
+        if(args != null){
+            potatoURL = args.getString("potatoURL");
+        }
+        return new PotatoLoader(this, potatoURL);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+        Log.d(TAG, "Got result from loader");
+        if (data != null){
+            mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
+        }
+        else{
+            mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
     }
 }
