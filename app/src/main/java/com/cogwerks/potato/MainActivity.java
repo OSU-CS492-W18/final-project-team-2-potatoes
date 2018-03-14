@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private EditText mPotatoSearchText;
     private ImageView mUserPic;
+    private ImageButton mChooseGallery;
+    private ImageButton mChooseCamera;
     private int PICK_IMAGE_REQUEST = 1;
     private static final String IMAGE_TYPE = "image/*";
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -52,16 +55,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        mUserPic = (ImageView) findViewById(R.id.iv_user_image);
-        mUserPic.setOnClickListener(new View.OnClickListener() {
+        mChooseGallery = (ImageButton) findViewById(R.id.ib_gallery_btn);
+        mChooseGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setType(IMAGE_TYPE);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                startActivityForResult(Intent.createChooser(intent, "Select a saved picture"), PICK_IMAGE_REQUEST);
             }
         });
+
+        mChooseCamera = (ImageButton) findViewById(R.id.ib_camera_btn);
+        //Add onClickListener for camera button here
 
     }
 
@@ -87,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Uri uri = data.getData();
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ImageView imageView = (ImageView) findViewById(R.id.iv_user_image);
+                imageView.setImageBitmap(bitmap);
                 //send this data to our api
             } catch (IOException e) {
                 Log.d("Error: ", "Failed to receive image. Please try again");
