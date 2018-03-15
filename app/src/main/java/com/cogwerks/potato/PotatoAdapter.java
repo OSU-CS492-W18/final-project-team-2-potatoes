@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -46,14 +47,20 @@ public class PotatoAdapter extends RecyclerView.Adapter<PotatoAdapter.PotatoView
 
     class PotatoViewHolder extends RecyclerView.ViewHolder {
         private TextView mResultTextView;
+        private TextView mResultConfidenceView;
+        private ProgressBar mResultPercentBar;
 
         public PotatoViewHolder(View itemView) {
             super(itemView);
             mResultTextView = (TextView) itemView.findViewById(R.id.tv_result_text);
+            mResultConfidenceView = (TextView) itemView.findViewById(R.id.tv_result_confidence);
+            mResultPercentBar = (ProgressBar) itemView.findViewById(R.id.tv_result_percent_bar);
         }
 
         public void bind(String result){
-            mResultTextView.setText(result);
+            mResultTextView.setText(result + ":");
+            mResultConfidenceView.setText("70%");
+            mResultPercentBar.setProgress(70);
         }
     }
 }
