@@ -19,8 +19,30 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_upload_image"
             android:layout_marginBottom="0dp"
-            android:clickable="true"
             android:contentDescription="Upload Image"/>
+       
+        <LinearLayout
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
+
+            <ImageButton
+                android:id="@+id/ib_gallery_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_gallery_btn" />
+
+            <ImageButton
+                android:id="@+id/ib_camera_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_action_name" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_main_question"
