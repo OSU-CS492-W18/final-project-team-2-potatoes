@@ -1,5 +1,6 @@
 package com.cogwerks.potato;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -19,7 +20,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mUserPic;
     private ImageButton mChooseGallery;
     private ImageButton mChooseCamera;
+    private String mImageFileName = "imageFile";
     private int PICK_IMAGE_REQUEST = 1;
     private static final String IMAGE_TYPE = "image/*";
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -95,7 +99,13 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ImageView imageView = (ImageView) findViewById(R.id.iv_user_image);
                 imageView.setImageBitmap(bitmap);
-                //send this data to our api
+
+                // prepare our acquired image data for our api... by saving to a local file first
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+                FileOutputStream fos = openFileOutput(mImageFileName, Context.MODE_PRIVATE);
+                fos.write(bytes.toByteArray());
+                fos.close();
             } catch (IOException e) {
                 Log.d("Error: ", "Failed to receive image. Please try again");
             }
