@@ -5,8 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
 
 public class ResultDetailActivity extends AppCompatActivity {
+    private static final String TAG = ResultDetailActivity.class.getSimpleName();
+
     private RecyclerView mResultListRecyclerView;
     private PotatoAdapter mPotatoAdapter;
 
@@ -29,5 +34,11 @@ public class ResultDetailActivity extends AppCompatActivity {
             String searchString = intent.getExtras().getString("searchString");
             mPotatoAdapter.addResult(searchString);
         }
+        loadResults();
+    }
+
+    public void loadResults() {
+        String url = MSAzureComputerVisionUtils.buildAnalyzeURL();
+        Log.d(TAG, "loadResults: " + url);
     }
 }
