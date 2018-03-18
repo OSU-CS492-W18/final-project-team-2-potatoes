@@ -1,16 +1,18 @@
 package com.cogwerks.potato;
 
 import android.content.Intent;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
-
-public class ResultDetailActivity extends AppCompatActivity {
+public class ResultDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private static final String TAG = ResultDetailActivity.class.getSimpleName();
+
+    private static final String ANALYZE_URL_KEY = "visionAnalyzeURL";
 
     private RecyclerView mResultListRecyclerView;
     private PotatoAdapter mPotatoAdapter;
@@ -34,11 +36,32 @@ public class ResultDetailActivity extends AppCompatActivity {
             String searchString = intent.getExtras().getString("searchString");
             mPotatoAdapter.addResult(searchString);
         }
-        loadResults();
     }
 
-    public void loadResults() {
-        String url = MSAzureComputerVisionUtils.buildAnalyzeURL();
-        Log.d(TAG, "loadResults: " + url);
+    @Override
+    public Loader<String> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader being called");
+        String visionAnalyzeURL = null;
+        if (args != null) {
+            visionAnalyzeURL = args.getString(ANALYZE_URL_KEY);
+        }
+        return new PotatoLoader(this, visionAnalyzeURL);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+        Log.d(TAG, "onLoadFinished: got results from loader");
+        if (data != null) {
+            // declare ArrayList of custom-class instances that represents list of grabbed tags. Assign parse results of "data" to it.
+            // Through the adapter, update the results with the above ArrayList
+            mPotatoAdapter.addResult(data);
+        } else {
+            // set loading error to be visible (see MainActivity version for ref)
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+        // Nothing to do
     }
 }
