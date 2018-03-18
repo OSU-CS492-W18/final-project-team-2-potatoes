@@ -9,10 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
+
 public class ResultDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private static final String TAG = ResultDetailActivity.class.getSimpleName();
 
     private static final String ANALYZE_URL_KEY = "visionAnalyzeURL";
+    private static final int VISION_ANALYZE_LOADER_ID = 0;
 
     private RecyclerView mResultListRecyclerView;
     private PotatoAdapter mPotatoAdapter;
@@ -36,6 +39,15 @@ public class ResultDetailActivity extends AppCompatActivity implements LoaderMan
             String searchString = intent.getExtras().getString("searchString");
             mPotatoAdapter.addResult(searchString);
         }
+
+        getSupportLoaderManager().initLoader(VISION_ANALYZE_LOADER_ID, null, this);
+    }
+
+    private void doVisionAnalyze() {
+        String visionAnalyzeURL = MSAzureComputerVisionUtils.buildAnalyzeURL();
+        Bundle args = new Bundle();
+        args.putString(ANALYZE_URL_KEY, visionAnalyzeURL);
+        getSupportLoaderManager().restartLoader(VISION_ANALYZE_LOADER_ID, args, this);
     }
 
     @Override

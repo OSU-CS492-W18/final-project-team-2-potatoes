@@ -22,7 +22,7 @@ import android.widget.TextView;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+public class MainActivity extends AppCompatActivity {
 
     private EditText mPotatoSearchText;
     private ImageView mUserPic;
@@ -100,32 +100,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Log.d("Error: ", "Failed to receive image. Please try again");
             }
         }
-    }
-
-    @Override
-    public Loader<String> onCreateLoader(int id, Bundle args) {
-        String potatoURL = null;
-        if(args != null){
-            potatoURL = args.getString("potatoURL");
-        }
-        return new PotatoLoader(this, potatoURL);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
-        Log.d(TAG, "Got result from loader");
-        if (data != null){
-            mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
-        }
-        else{
-            mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
-        }
-
-    }
-
-
-    @Override
-    public void onLoaderReset(Loader loader) {
-
     }
 }
