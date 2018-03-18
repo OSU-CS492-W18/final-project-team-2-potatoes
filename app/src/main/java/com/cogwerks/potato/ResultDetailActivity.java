@@ -1,6 +1,8 @@
 package com.cogwerks.potato;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
+
+import java.io.FileNotFoundException;
 
 public class ResultDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private static final String TAG = ResultDetailActivity.class.getSimpleName();
@@ -40,6 +44,13 @@ public class ResultDetailActivity extends AppCompatActivity implements LoaderMan
             mPotatoAdapter.addResult(searchString);
         }
 
+        // retrieve our saved image here, and call doVisionAnalyze... perhaps edit to take file.
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(this.getApplicationContext().openFileInput("imageFile"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        doVisionAnalyze();
         getSupportLoaderManager().initLoader(VISION_ANALYZE_LOADER_ID, null, this);
     }
 

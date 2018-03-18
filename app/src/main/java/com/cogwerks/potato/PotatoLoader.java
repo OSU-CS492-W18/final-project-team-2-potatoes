@@ -6,6 +6,8 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 
+import com.cogwerks.potato.utils.NetworkUtils;
+
 import java.io.IOException;
 import java.security.acl.LastOwnerException;
 
@@ -40,14 +42,14 @@ public class PotatoLoader extends AsyncTaskLoader<String> {
     @Override
     public String loadInBackground() {
         if(mPotatoURL != null){
-            Log.d(TAG, "Loading reults from API");
+            Log.d(TAG, "Loading results from API with URL: " + mPotatoURL);
             String potatoResults = null;
-            /*try{
-                /*potatoResults = get the results from the api;*
-            }
-            catch(IOException e){
+            try {
+                potatoResults = NetworkUtils.doHTTPPost(mPotatoURL); // doHTTPPost should perform the analyze call on a static web image.
+            } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
+            Log.d(TAG, "loadInBackground: " + potatoResults);
             return potatoResults;
         }
         else{

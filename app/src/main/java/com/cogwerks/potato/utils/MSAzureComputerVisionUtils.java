@@ -10,13 +10,13 @@ public class MSAzureComputerVisionUtils {
     private final static String CV_ANALYZE_BASE_URL = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze";
 
     private final static String CV_ANALYZE_FEATURES_PARAM = "visualFeatures";
-    private final static String CV_ANALYZE_FEATURES_VALUE = "Description,Tags,Color,Faces,Adult";
+    private final static String CV_ANALYZE_FEATURES_VALUE = "Tags";
 
     private final static String CV_ANALYZE_DETAILS_PARAM = "details";
-    private final static String CV_ANALYZE_DETAILS_VALUE = "Celebrities,Landmarks";
+    private final static String CV_ANALYZE_DETAILS_VALUE = "Celebrities";
 
     private final static String CV_ANALYZE_API_KEY_PARAM = "subscription-key";
-    private final static String CV_ANALYZE_API_KEY_VALUE = "placeholder";
+    private final static String CV_ANALYZE_API_KEY_VALUE = "a97aab14e3264b74a601e0c38cfcd9bc";
 
     public static String buildAnalyzeURL() {
         return Uri.parse(CV_ANALYZE_BASE_URL).buildUpon()
