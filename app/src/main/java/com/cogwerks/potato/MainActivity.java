@@ -1,5 +1,6 @@
 package com.cogwerks.potato;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -21,17 +22,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import java.io.File;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+public class MainActivity extends AppCompatActivity {
 
     private EditText mPotatoSearchText;
     private ImageView mUserPic;
     private ImageButton mChooseGallery;
     private ImageButton mChooseCamera;
+    private String mImageFileName = "imageFile";
     private int PICK_IMAGE_REQUEST = 1;
     private int CAMERA_RES_REQUEST = 2;
 
@@ -86,34 +92,36 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState){
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig){
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData() != null){
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData() != null) {
             Uri uri = data.getData();
-            try{
+            try {
+
                 updateThumbnailPicture(uri);
                 //send this data to our api
+
+
             } catch (IOException e) {
                 Log.d(TAG, "Failed to receive gallery image. Please try again");
             }
-        }
-        else if(requestCode == CAMERA_RES_REQUEST){
-            try{
+        } else if (requestCode == CAMERA_RES_REQUEST) {
+            try {
                 updateThumbnailPicture(mPhotoUri);
             } catch (IOException e) {
                 Log.d(TAG, "Failed to receive camera image. Please try again");
@@ -123,48 +131,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    private void updateThumbnailPicture(Uri imageUri) throws IOException
-    {
+    private void updateThumbnailPicture(Uri imageUri) throws IOException {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
         ImageView imageView = (ImageView) findViewById(R.id.iv_user_image);
         imageView.setImageBitmap(bitmap);
+
+        // prepare our acquired image data for our api... by saving to a local file first
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        FileOutputStream fos = openFileOutput(mImageFileName, Context.MODE_PRIVATE);
+        fos.write(bytes.toByteArray());
+        fos.close();
     }
-
-    @Override
-    public Loader<String> onCreateLoader(int id, Bundle args) {
-        String potatoURL = null;
-        if(args != null){
-            potatoURL = args.getString("potatoURL");
-        }
-        return new PotatoLoader(this, potatoURL);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
-        Log.d(TAG, "Got result from loader");
-        if (data != null){
-            mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
-        }
-        else{
-            mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
-        }
-
-    }
-
-
-    @Override
-    public void onLoaderReset(Loader loader) {
-
-    }
-
 
 
     private void launchCameraIntent() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // If there is no app to handle the camera, bail out
-        if (cameraIntent.resolveActivity(getPackageManager()) == null)
-        {
+        if (cameraIntent.resolveActivity(getPackageManager()) == null) {
             Log.d(TAG, "No camera app located. Cancelling request.");
             return;
         }
@@ -202,6 +187,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Save a file: path for use with ACTION_VIEW intents
         return image;
     }
-
-
 }
+

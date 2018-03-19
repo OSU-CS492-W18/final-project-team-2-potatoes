@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -15,10 +17,10 @@ import java.util.ArrayList;
  */
 
 public class PotatoAdapter extends RecyclerView.Adapter<PotatoAdapter.PotatoViewHolder> {
-    private ArrayList<String> mResultList;
+    private ArrayList<MSAzureComputerVisionUtils.AnalyzeResult> mResultList;
 
     public PotatoAdapter(){
-        mResultList = new ArrayList<String>();
+        mResultList = new ArrayList<MSAzureComputerVisionUtils.AnalyzeResult>();
     }
 
     @Override
@@ -31,12 +33,12 @@ public class PotatoAdapter extends RecyclerView.Adapter<PotatoAdapter.PotatoView
 
     @Override
     public void onBindViewHolder(PotatoViewHolder holder, int position) {
-        String result = mResultList.get(mResultList.size() - position - 1);
+        MSAzureComputerVisionUtils.AnalyzeResult result = mResultList.get(position);
         holder.bind(result);
     }
 
-    public void addResult(String result){
-        mResultList.add(result);
+    public void updateResults(ArrayList<MSAzureComputerVisionUtils.AnalyzeResult> results) {
+        mResultList = results;
         notifyDataSetChanged();
     }
 
@@ -57,10 +59,10 @@ public class PotatoAdapter extends RecyclerView.Adapter<PotatoAdapter.PotatoView
             mResultPercentBar = (ProgressBar) itemView.findViewById(R.id.tv_result_percent_bar);
         }
 
-        public void bind(String result){
-            mResultTextView.setText(result + ":");
-            mResultConfidenceView.setText("70%");
-            mResultPercentBar.setProgress(70);
+        public void bind(MSAzureComputerVisionUtils.AnalyzeResult result){
+            mResultTextView.setText(result.tag + ":");
+            mResultConfidenceView.setText(Integer.toString(result.roundConfidence()) + "%");
+            mResultPercentBar.setProgress(result.roundConfidence());
         }
     }
 }
