@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Used based on the template shown at
+    https://developer.android.com/training/camera/photobasics.html
+-->
+<paths>
+    <external-path name="my_images" path="Android/data/com.cogwerks.potato/files/Pictures" />
+</paths>
