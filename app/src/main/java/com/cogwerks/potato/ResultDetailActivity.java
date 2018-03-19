@@ -14,6 +14,7 @@ import android.util.Log;
 import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class ResultDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private static final String TAG = ResultDetailActivity.class.getSimpleName();
@@ -41,7 +42,6 @@ public class ResultDetailActivity extends AppCompatActivity implements LoaderMan
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra("searchString")){
             String searchString = intent.getExtras().getString("searchString");
-            mPotatoAdapter.addResult(searchString);
         }
 
         // retrieve our saved image here, and call doVisionAnalyze... perhaps edit to take file.
@@ -76,8 +76,9 @@ public class ResultDetailActivity extends AppCompatActivity implements LoaderMan
         Log.d(TAG, "onLoadFinished: got results from loader");
         if (data != null) {
             // declare ArrayList of custom-class instances that represents list of grabbed tags. Assign parse results of "data" to it.
+            ArrayList<MSAzureComputerVisionUtils.AnalyzeResult> tags = MSAzureComputerVisionUtils.parseAnalyzeResultsJSON(data);
             // Through the adapter, update the results with the above ArrayList
-            mPotatoAdapter.addResult(data);
+            mPotatoAdapter.updateResults(tags);
         } else {
             // set loading error to be visible (see MainActivity version for ref)
         }
