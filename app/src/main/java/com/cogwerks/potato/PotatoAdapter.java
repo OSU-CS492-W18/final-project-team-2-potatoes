@@ -33,7 +33,7 @@ public class PotatoAdapter extends RecyclerView.Adapter<PotatoAdapter.PotatoView
 
     @Override
     public void onBindViewHolder(PotatoViewHolder holder, int position) {
-        MSAzureComputerVisionUtils.AnalyzeResult result = mResultList.get(mResultList.size() - position - 1);
+        MSAzureComputerVisionUtils.AnalyzeResult result = mResultList.get(position);
         holder.bind(result);
     }
 
@@ -61,8 +61,8 @@ public class PotatoAdapter extends RecyclerView.Adapter<PotatoAdapter.PotatoView
 
         public void bind(MSAzureComputerVisionUtils.AnalyzeResult result){
             mResultTextView.setText(result.tag + ":");
-            mResultConfidenceView.setText("70%");
-            mResultPercentBar.setProgress(70);
+            mResultConfidenceView.setText(Integer.toString(result.roundConfidence()) + "%");
+            mResultPercentBar.setProgress(result.roundConfidence());
         }
     }
 }

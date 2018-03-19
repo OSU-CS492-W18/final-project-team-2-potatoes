@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +30,17 @@ public class MSAzureComputerVisionUtils {
     public static class AnalyzeResult implements Serializable {
         public String tag;
         public String confidence;
+
+        /* Converts confidence from string to double, then rounds to two decimal places and
+        multiples by 100 to return a percentage
+        */
+        public int roundConfidence() {
+            double confidenceDec = Double.parseDouble(this.confidence);
+            BigDecimal bd = new BigDecimal(confidenceDec);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            double percent = bd.doubleValue() * 100;
+            return (int)percent;
+        }
     }
 
     public static String buildAnalyzeURL() {
