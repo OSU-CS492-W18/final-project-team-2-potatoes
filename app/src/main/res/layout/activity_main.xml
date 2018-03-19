@@ -52,7 +52,7 @@
             android:textSize="32sp"
             android:textColor="#000000"
             android:textAlignment="center"
-            android:text="Is this a "/>
+            android:text="@string/is_this_a"/>
 
         <EditText
             android:id="@+id/et_search_box"

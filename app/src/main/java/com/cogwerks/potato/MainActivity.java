@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mPotatoSearchText = (EditText) findViewById(R.id.et_search_box);
+        mPotatoSearchText.setText("Some default value");
         mLoadingErrorMessageTV = findViewById(R.id.tv_loading_error_message);
 
         Button tellmeButton = (Button) findViewById(R.id.btn_tell_me);

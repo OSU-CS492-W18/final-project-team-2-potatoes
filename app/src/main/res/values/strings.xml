@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Is this a Potato?</string>
+    <string name="is_this_a">Is this a</string>
 </resources>
