@@ -13,13 +13,19 @@ import android.util.Log;
 
 import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ResultDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private static final String TAG = ResultDetailActivity.class.getSimpleName();
 
     private static final String ANALYZE_URL_KEY = "visionAnalyzeURL";
+    private static final String ANALYZE_RAW_IMAGE_DATA = "visionAnalyzeBytes";
     private static final int VISION_ANALYZE_LOADER_ID = 0;
 
     private RecyclerView mResultListRecyclerView;
@@ -44,20 +50,30 @@ public class ResultDetailActivity extends AppCompatActivity implements LoaderMan
             String searchString = intent.getExtras().getString("searchString");
         }
 
-        // retrieve our saved image here, and call doVisionAnalyze... perhaps edit to take file.
-        try {
-            Bitmap bitmap = BitmapFactory.decodeStream(this.getApplicationContext().openFileInput("imageFile"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         doVisionAnalyze();
         getSupportLoaderManager().initLoader(VISION_ANALYZE_LOADER_ID, null, this);
     }
 
     private void doVisionAnalyze() {
         String visionAnalyzeURL = MSAzureComputerVisionUtils.buildAnalyzeURL();
+        byte[] visionAnalyzeBytes = null;
+        // put image into input stream
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(this.getApplicationContext().openFileInput("imageFile"));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(output.toByteArray());
+            try {
+                visionAnalyzeBytes = IOUtils.toByteArray(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         Bundle args = new Bundle();
         args.putString(ANALYZE_URL_KEY, visionAnalyzeURL);
+        args.putByteArray(ANALYZE_RAW_IMAGE_DATA, visionAnalyzeBytes);
         getSupportLoaderManager().restartLoader(VISION_ANALYZE_LOADER_ID, args, this);
     }
 
@@ -65,10 +81,12 @@ public class ResultDetailActivity extends AppCompatActivity implements LoaderMan
     public Loader<String> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader being called");
         String visionAnalyzeURL = null;
+        byte[] visionAnalyzeBytes = null;
         if (args != null) {
             visionAnalyzeURL = args.getString(ANALYZE_URL_KEY);
+            visionAnalyzeBytes = args.getByteArray(ANALYZE_RAW_IMAGE_DATA);
         }
-        return new PotatoLoader(this, visionAnalyzeURL);
+        return new PotatoLoader(this, visionAnalyzeURL, visionAnalyzeBytes);
     }
 
     @Override

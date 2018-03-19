@@ -1,6 +1,14 @@
 package com.cogwerks.potato.utils;
 
+import android.content.Context;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -31,8 +39,9 @@ public class NetworkUtils {
         }
     }
 
-    public static String doHTTPPost(String url) throws IOException {
-        RequestBody body = RequestBody.create(JSON, "{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/1/12/Broadway_and_Times_Square_by_night.jpg\"}");
+    public static String doHTTPPost(String url, byte[] data) throws IOException {
+        // RequestBody body = RequestBody.create(JSON, "{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/1/12/Broadway_and_Times_Square_by_night.jpg\"}");
+        RequestBody body = RequestBody.create(BINARY, data);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
