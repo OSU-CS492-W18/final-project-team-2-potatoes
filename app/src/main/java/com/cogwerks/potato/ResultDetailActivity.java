@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cogwerks.potato.utils.MSAzureComputerVisionUtils;
 import com.cogwerks.potato.utils.MSAzureComputerVisionUtils.FullApiResult;
 
 public class ResultDetailActivity extends AppCompatActivity {
@@ -54,9 +55,9 @@ public class ResultDetailActivity extends AppCompatActivity {
             mPotatoAdapter.updateResults(mCompleteResult.tags);
 
             mAdultFlagTV.setText(mCompleteResult.isAdult);
-            mAdultScoreTV.setText(mCompleteResult.adultScore);
+            mAdultScoreTV.setText(MSAzureComputerVisionUtils.roundConfidence(mCompleteResult.adultScore) + "%");
             mRacyFlagTV.setText(mCompleteResult.isRacy);
-            mRacyScoreTV.setText(mCompleteResult.racyScore);
+            mRacyScoreTV.setText(MSAzureComputerVisionUtils.roundConfidence(mCompleteResult.racyScore) + "%");
             misBwImgTV.setText(mCompleteResult.blackAndWhite);
             mClipartTV.setText(mCompleteResult.clipArtType);
         }
@@ -70,7 +71,7 @@ public class ResultDetailActivity extends AppCompatActivity {
         {
             findViewById(R.id.ll_adult_flag).setVisibility(View.INVISIBLE);
             findViewById(R.id.ll_adult_score).setVisibility(View.INVISIBLE);
-            findViewById(R.id.ll_adult_flag).setVisibility(View.INVISIBLE);
+            findViewById(R.id.ll_racy_flag).setVisibility(View.INVISIBLE);
             findViewById(R.id.ll_racy_score).setVisibility(View.INVISIBLE);
         }
 

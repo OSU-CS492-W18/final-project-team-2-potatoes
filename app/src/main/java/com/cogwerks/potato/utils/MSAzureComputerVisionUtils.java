@@ -31,6 +31,14 @@ public class MSAzureComputerVisionUtils {
 
     public static String[] azureClipartType = {"Non Clip-Art", "Ambiguous", "Normal Clip-Art", "Good Clip-Art"};
 
+    public static String roundConfidence(String confidence) {
+        double confidenceDec = Double.parseDouble(confidence);
+        BigDecimal bd = new BigDecimal(confidenceDec);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        double percent = bd.doubleValue() * 100;
+        return Integer.toString((int)percent);
+    }
+
     public static class FullApiResult implements Serializable {
         public ArrayList<AnalyzeResult> tags;
         public String isAdult;
@@ -39,6 +47,7 @@ public class MSAzureComputerVisionUtils {
         public String racyScore;
         public String clipArtType;
         public String blackAndWhite;
+
 
     }
 
