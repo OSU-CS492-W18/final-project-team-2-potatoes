@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/tv_result_text"
@@ -12,7 +13,7 @@
         android:layout_weight="1"
         android:layout_gravity="start"
         android:layout_marginStart="32dp"
-        android:textSize="20sp"/>
+        android:textSize="18sp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,7 +26,7 @@
             android:id="@+id/tv_result_confidence"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <ProgressBar
             android:id="@+id/tv_result_percent_bar"
