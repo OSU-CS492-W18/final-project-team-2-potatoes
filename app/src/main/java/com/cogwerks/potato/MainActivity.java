@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
     private String mImageFileName = "imageFile";
     private int PICK_IMAGE_REQUEST = 1;
     private int CAMERA_RES_REQUEST = 2;
+    private final static String LAST_COMPLETE_RESULT = "lastCompleteResult";
 
     private static final String IMAGE_TYPE = "image/*";
     private static final String TAG = MainActivity.class.getSimpleName();
