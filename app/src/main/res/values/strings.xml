@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Is this a Potato?</string>
+    <string name="is_this_a">Is this a</string>
+    <string name="load_fail_err">Whoops. Query failed, check your internet connection!</string>
+    <string name="upload_image">Upload Image</string>
+
+
+    <string name="pref_search_default">Potato</string>
+    <string name="pref_search_key">pref_search_string</string>
+    <string name="pref_search_title">Current Search Tag</string>
+    <string name="error_no_image">Please select an image first.</string>
+
+
+    <string name="pref_fields_title">Visible Fields</string>
+
+    <string name="pref_fields_color_key">pref_fields_color_key</string>
+    <string name="pref_fields_adult_key">pref_fields_adult_key</string>
+    <string name="pref_fields_tag_key">pref_fields_tag_key</string>
+    <string name="pref_fields_clipart_key">pref_fields_clipart_key</string>
+
+    <string name="pref_fields_clipart_title">Clipart Detection</string>
+    <string name="pref_fields_tag_title">Show Returned Tags</string>
+    <string name="pref_fields_color_title">Show Color Stats</string>
+    <string name="pref_fields_adult_title">Show Adult/Racy Scores</string>
+    <string name="pref_fields_tag_default">true</string>
+    <string name="pref_fields_adult_default">true</string>
+    <string name="pref_fields_color_default">true</string>
+    <string name="pref_fields_clipart_default">false</string>
+    <string name="adult_flag_label">Adult Flag</string>
+
 </resources>

@@ -1,26 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fillViewport="true">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context="com.cogwerks.potato.MainActivity">
 
-        <ImageView
-            android:id="@+id/iv_user_image"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_upload_image"
-            android:layout_marginBottom="0dp"
-            android:contentDescription="Upload Image"/>
-       
+            android:padding="4dp">
+
+
+            <ImageView
+                android:id="@+id/iv_user_image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:src="@drawable/ic_upload_image"
+                android:layout_marginBottom="0dp"
+                android:contentDescription="@string/upload_image"
+                android:background="#AAAAAA"
+                android:padding="4dp"
+                android:tag="default"/>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pb_query_running"
+                android:layout_gravity="center"
+                android:minWidth="90dp"
+                android:minHeight="90dp"
+                android:visibility="invisible"
+                />
+        </FrameLayout>
+
+
         <LinearLayout
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
@@ -52,7 +68,7 @@
             android:textSize="32sp"
             android:textColor="#000000"
             android:textAlignment="center"
-            android:text="Is this a "/>
+            android:text="@string/is_this_a"/>
 
         <EditText
             android:id="@+id/et_search_box"
@@ -66,9 +82,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:padding="16dp"
-            android:visibility="invisible"
-            android:text="Woops. We couldn't load your results. Check your internet connection and try again." />
+            android:padding="8dp"
+            android:visibility="visible"
+            android:text="" />
 
         <Button
             android:id="@+id/btn_tell_me"
@@ -77,5 +93,13 @@
             android:layout_gravity="center"
             android:text="Tell me now!"
             android:textSize="24sp"/>
+        <Button
+            android:id="@+id/btn_detail_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Detail View"
+            android:textSize="18sp"
+            android:visibility="invisible"/>
     </LinearLayout>
-</ScrollView>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_fields_title">
+        <SwitchPreference
+            android:key="@string/pref_fields_tag_key"
+            android:title="@string/pref_fields_tag_title"
+            android:defaultValue="@string/pref_fields_tag_default"/>
+        <SwitchPreference
+            android:key="@string/pref_fields_adult_key"
+            android:title="@string/pref_fields_adult_title"
+            android:defaultValue="@string/pref_fields_adult_default"/>
+        <SwitchPreference
+            android:key="@string/pref_fields_color_key"
+            android:title="@string/pref_fields_color_title"
+            android:defaultValue="@string/pref_fields_color_default"/>
+
+        <SwitchPreference
+            android:key="@string/pref_fields_clipart_key"
+            android:title="@string/pref_fields_clipart_title"
+            android:defaultValue="@string/pref_fields_clipart_default"/>
+    </PreferenceCategory>
+</PreferenceScreen>
