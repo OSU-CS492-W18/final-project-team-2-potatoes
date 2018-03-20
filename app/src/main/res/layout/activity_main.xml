@@ -22,7 +22,8 @@
                 android:layout_marginBottom="0dp"
                 android:contentDescription="@string/upload_image"
                 android:background="#AAAAAA"
-                android:padding="4dp"/>
+                android:padding="4dp"
+                android:tag="default"/>
 
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -81,9 +82,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:padding="16dp"
-            android:visibility="invisible"
-            android:text="Woops. We couldn't load your results. Check your internet connection and try again." />
+            android:padding="8dp"
+            android:visibility="visible"
+            android:text="" />
 
         <Button
             android:id="@+id/btn_tell_me"
@@ -92,5 +93,13 @@
             android:layout_gravity="center"
             android:text="Tell me now!"
             android:textSize="24sp"/>
+        <Button
+            android:id="@+id/btn_detail_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Detail View"
+            android:textSize="18sp"
+            android:visibility="invisible"/>
     </LinearLayout>
 

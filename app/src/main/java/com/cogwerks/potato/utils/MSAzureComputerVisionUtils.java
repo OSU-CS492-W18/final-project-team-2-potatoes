@@ -1,6 +1,7 @@
 package com.cogwerks.potato.utils;
 
 import android.net.Uri;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,12 +33,12 @@ public class MSAzureComputerVisionUtils {
 
     public static class FullApiResult implements Serializable {
         public ArrayList<AnalyzeResult> tags;
-        public boolean isAdult;
-        public boolean isRacy;
+        public String isAdult;
+        public String isRacy;
         public String adultScore;
         public String racyScore;
         public String clipArtType;
-        public boolean blackAndWhite;
+        public String blackAndWhite;
 
     }
 
@@ -87,11 +88,11 @@ public class MSAzureComputerVisionUtils {
             JSONObject adultElement = resultsObj.getJSONObject("adult");
             completeResult.adultScore = adultElement.getString("adultScore");
             completeResult.racyScore  = adultElement.getString("racyScore");
-            completeResult.isAdult    = adultElement.getBoolean("isAdultContent");
-            completeResult.isRacy    = adultElement.getBoolean("isRacyContent");
+            completeResult.isAdult    = adultElement.getString("isAdultContent");
+            completeResult.isRacy    = adultElement.getString("isRacyContent");
 
             JSONObject colorElement = resultsObj.getJSONObject("color");
-            completeResult.blackAndWhite = colorElement.getBoolean("isBwImg");
+            completeResult.blackAndWhite = colorElement.getString("isBwImg");
 
             JSONObject imageElement = resultsObj.getJSONObject("imageType");
             int clipArtIndex = imageElement.getInt("clipArtType");
@@ -100,6 +101,7 @@ public class MSAzureComputerVisionUtils {
             return completeResult;
 
         } catch (JSONException e) {
+            Log.d("FINDME", "JSON FAILURE: " + e.getMessage());
             return new FullApiResult();
         }
     }

@@ -2,11 +2,13 @@ package com.cogwerks.potato;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -14,7 +16,12 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +43,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity  implements LoaderManager.LoaderCallbacks<String>{
@@ -46,8 +52,8 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
     private ImageButton mChooseGallery;
     private ImageButton mChooseCamera;
     private ProgressBar mLoadingPB;
-    private Button mTellmeButton;
-
+    private Button mTellMeBtn;
+    private Button mDetailViewBtn;
 
     private String mImageFileName = "imageFile";
     private int PICK_IMAGE_REQUEST = 1;
@@ -60,7 +66,7 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
     private static final String ANALYZE_RAW_IMAGE_DATA = "visionAnalyzeBytes";
     private static final int VISION_ANALYZE_LOADER_ID = 0;
     MSAzureComputerVisionUtils.FullApiResult mLastCompleteResult = null;
-
+    SharedPreferences mPrefs;
 
     private Uri mPhotoUri;
 
@@ -70,28 +76,45 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+
         mPotatoSearchText = (EditText) findViewById(R.id.et_search_box);
-        mPotatoSearchText.setText("Some default value");
+        mPotatoSearchText.setText(mPrefs.getString(
+                getString(R.string.pref_search_key),
+                getString(R.string.pref_search_default)
+        ));
+
         mLoadingErrorMessageTV = findViewById(R.id.tv_loading_error_message);
         mLoadingPB = findViewById(R.id.pb_query_running);
         mUserPic = (ImageView) findViewById(R.id.iv_user_image);
 
-        mTellmeButton = (Button) findViewById(R.id.btn_tell_me);
+        mTellMeBtn = (Button) findViewById(R.id.btn_tell_me);
+        mDetailViewBtn = (Button) findViewById(R.id.btn_detail_view);
         //Called when user hits tell me button
-        mTellmeButton.setOnClickListener(new View.OnClickListener() {
+        mTellMeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String searchText = mPotatoSearchText.getText().toString();
-//                if (!TextUtils.isEmpty(searchText)) {
-//                    Intent intent = new Intent(getApplicationContext(), ResultDetailActivity.class);
-//                    intent.putExtra("searchString", searchText);
-//                    startActivity(intent);
-//                }
-
-                doVisionAnalyze();
+                if(mUserPic.getTag().equals("default"))
+                {
+                    mLoadingErrorMessageTV.setText(R.string.error_no_image);
+                }
+                else
+                    doVisionAnalyze();
             }
         });
-
+        mDetailViewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mLastCompleteResult != null) {
+                    Bundle resultBundle = new Bundle();
+                    resultBundle.putSerializable(ResultDetailActivity.dataExtra, mLastCompleteResult);
+                    Intent intent = new Intent(getApplicationContext(), ResultDetailActivity.class);
+                    intent.putExtras(resultBundle);
+                    startActivity(intent);
+                }
+            }
+        });
         mChooseGallery = (ImageButton) findViewById(R.id.ib_gallery_btn);
         mChooseGallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +134,69 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
             }
         });
 
-        //getSupportLoaderManager().initLoader(VISION_ANALYZE_LOADER_ID, null, this);
+        mPotatoSearchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences.Editor edit = mPrefs.edit();
+                edit.putString(getString(R.string.pref_search_key), s.toString());
+                edit.commit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPotatoSearchText.setText(mPrefs.getString(
+                getString(R.string.pref_search_key),
+                getString(R.string.pref_search_default)
+        ));
     }
 
     @Override
@@ -162,6 +247,7 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
         fos.write(bytes.toByteArray());
         fos.close();
 
+        mUserPic.setTag("configured");
     }
 
 
@@ -211,13 +297,11 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
     private void doVisionAnalyze() {
 
         //Step 1: Deactivate calling buttons
-        mTellmeButton.setClickable(false);
+        mTellMeBtn.setClickable(false);
         //Step 2: Activate progress spinner
         mLoadingPB.setVisibility(View.VISIBLE);
-        mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
+        mLoadingErrorMessageTV.setText("");
         //Step 3: Run it
-
-
 
         String visionAnalyzeURL = MSAzureComputerVisionUtils.buildAnalyzeURL();
         byte[] visionAnalyzeBytes = null;
@@ -257,8 +341,8 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
     public void onLoadFinished(Loader<String> loader, String data) {
         Log.d(TAG, "onLoadFinished: got results from loader");
         mLoadingPB.setVisibility(View.INVISIBLE);
-        mTellmeButton.setClickable(true);
-
+        mTellMeBtn.setClickable(true);
+        mDetailViewBtn.setVisibility(View.VISIBLE);
         if (data != null) {
             // declare ArrayList of custom-class instances that represents list of grabbed tags. Assign parse results of "data" to it.
             mLastCompleteResult = MSAzureComputerVisionUtils.parseAnalyzeResultsJSON(data);
@@ -281,7 +365,6 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
         } else {
             // set loading error to be visible (see MainActivity version for ref)
             mLoadingErrorMessageTV.setText(R.string.load_fail_err);
-            mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
 
         }
     }
@@ -298,5 +381,6 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
         else
             mUserPic.setBackgroundColor(0XFFFF0000);
     }
+
 }
 
