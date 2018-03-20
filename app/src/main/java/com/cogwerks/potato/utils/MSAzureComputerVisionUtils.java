@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Struct;
 import java.util.ArrayList;
 
 /**
@@ -19,13 +20,26 @@ public class MSAzureComputerVisionUtils {
     private final static String CV_ANALYZE_BASE_URL = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze";
 
     private final static String CV_ANALYZE_FEATURES_PARAM = "visualFeatures";
-    private final static String CV_ANALYZE_FEATURES_VALUE = "Tags,Description,Color,Faces,Adult";
+    private final static String CV_ANALYZE_FEATURES_VALUE = "Tags,Color,Adult,ImageType";
 
     private final static String CV_ANALYZE_DETAILS_PARAM = "details";
     private final static String CV_ANALYZE_DETAILS_VALUE = "Celebrities,Landmarks";
 
     private final static String CV_ANALYZE_API_KEY_PARAM = "subscription-key";
     private final static String CV_ANALYZE_API_KEY_VALUE = "a97aab14e3264b74a601e0c38cfcd9bc";
+
+    public static String[] azureClipartType = {"Non Clip-Art", "Ambiguous", "Normal Clip-Art", "Good Clip-Art"};
+
+    public static class FullApiResult implements Serializable {
+        public ArrayList<AnalyzeResult> tags;
+        public boolean isAdult;
+        public boolean isRacy;
+        public String adultScore;
+        public String racyScore;
+        public String clipArtType;
+        public boolean blackAndWhite;
+
+    }
 
     public static class AnalyzeResult implements Serializable {
         public String tag;
@@ -52,8 +66,11 @@ public class MSAzureComputerVisionUtils {
                 .toString();
     }
 
-    public static ArrayList<AnalyzeResult> parseAnalyzeResultsJSON(String resultsJSON) {
+    public static FullApiResult parseAnalyzeResultsJSON(String resultsJSON) {
         try {
+
+            FullApiResult completeResult = new FullApiResult();
+
             JSONObject resultsObj = new JSONObject(resultsJSON); // grab entire string as JSON object
             JSONArray resultsItems  = resultsObj.getJSONArray("tags"); // grab tags array
 
@@ -65,9 +82,27 @@ public class MSAzureComputerVisionUtils {
                 result.confidence = resultItem.getString("confidence");
                 analyzeResultsList.add(result);
             }
-            return analyzeResultsList;
+            completeResult.tags = analyzeResultsList;
+
+            JSONObject adultElement = resultsObj.getJSONObject("adult");
+            completeResult.adultScore = adultElement.getString("adultScore");
+            completeResult.racyScore  = adultElement.getString("racyScore");
+            completeResult.isAdult    = adultElement.getBoolean("isAdultContent");
+            completeResult.isRacy    = adultElement.getBoolean("isRacyContent");
+
+            JSONObject colorElement = resultsObj.getJSONObject("color");
+            completeResult.blackAndWhite = colorElement.getBoolean("isBwImg");
+
+            JSONObject imageElement = resultsObj.getJSONObject("imageType");
+            int clipArtIndex = imageElement.getInt("clipArtType");
+            completeResult.clipArtType = azureClipartType[clipArtIndex];
+
+            return completeResult;
+
         } catch (JSONException e) {
-            return  null;
+            return new FullApiResult();
         }
     }
+
+
 }
