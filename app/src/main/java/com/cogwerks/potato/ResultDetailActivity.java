@@ -71,7 +71,7 @@ public class ResultDetailActivity extends AppCompatActivity {
         {
             findViewById(R.id.ll_adult_flag).setVisibility(View.INVISIBLE);
             findViewById(R.id.ll_adult_score).setVisibility(View.INVISIBLE);
-            findViewById(R.id.ll_adult_flag).setVisibility(View.INVISIBLE);
+            findViewById(R.id.ll_racy_flag).setVisibility(View.INVISIBLE);
             findViewById(R.id.ll_racy_score).setVisibility(View.INVISIBLE);
         }
 
