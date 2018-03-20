@@ -63,26 +63,26 @@ public class ResultDetailActivity extends AppCompatActivity {
         boolean hideExtraTags = prefs.getBoolean(getString(R.string.pref_fields_tag_key), Boolean.parseBoolean(getString(R.string.pref_fields_tag_default)));
         if(!hideExtraTags)
         {
-            findViewById(R.id.rv_result_list).setVisibility(View.INVISIBLE);
+            findViewById(R.id.rv_result_list).setVisibility(View.GONE);
         }
         boolean hideAdultStats = prefs.getBoolean(getString(R.string.pref_fields_adult_key), Boolean.parseBoolean(getString(R.string.pref_fields_adult_default)));
         if(!hideAdultStats)
         {
-            findViewById(R.id.ll_adult_flag).setVisibility(View.INVISIBLE);
-            findViewById(R.id.ll_adult_score).setVisibility(View.INVISIBLE);
-            findViewById(R.id.ll_adult_flag).setVisibility(View.INVISIBLE);
-            findViewById(R.id.ll_racy_score).setVisibility(View.INVISIBLE);
+            findViewById(R.id.ll_adult_flag).setVisibility(View.GONE);
+            findViewById(R.id.ll_adult_score).setVisibility(View.GONE);
+            findViewById(R.id.ll_racy_flag).setVisibility(View.GONE);
+            findViewById(R.id.ll_racy_score).setVisibility(View.GONE);
         }
 
         boolean hideColorStats = prefs.getBoolean(getString(R.string.pref_fields_color_key), Boolean.parseBoolean(getString(R.string.pref_fields_color_default)));
         if(!hideColorStats)
         {
-            findViewById(R.id.ll_bw_img).setVisibility(View.INVISIBLE);
+            findViewById(R.id.ll_bw_img).setVisibility(View.GONE);
         }
         boolean hideClipartStats = prefs.getBoolean(getString(R.string.pref_fields_clipart_key), Boolean.parseBoolean(getString(R.string.pref_fields_clipart_default)));
         if(!hideClipartStats)
         {
-            findViewById(R.id.ll_clipart).setVisibility(View.INVISIBLE);
+            findViewById(R.id.ll_clipart).setVisibility(View.GONE);
         }
     }
 
